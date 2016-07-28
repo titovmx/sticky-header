@@ -1,0 +1,32 @@
+{
+  "name": "sticky-header",
+  "homepage": "https://github.com/titov-max/sticky-header",
+  "authors": [
+    "Maxim Titov <mtitov92@gmail.com>",
+    "Dmitry <dimitry.sitnov@gmail.com>"
+  ],
+  "description": "AngularJS fixed and resizable table header",
+  "main": "src/bootstrap.js",
+  "version": "1.1.0",
+  "keywords": [
+    "sticky",
+    "header",
+    "table",
+    "thead",
+    "resizable",
+    "angular",
+    "angularjs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "*",
+    "lodash": "*"
+  }
+}
