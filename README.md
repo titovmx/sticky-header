@@ -9,7 +9,7 @@ Code licensed under MIT license
 
 ## Installing via Bower
 
-bower install sticky-header
+bower install ng-sticky-header
 
 ## Demo
 
