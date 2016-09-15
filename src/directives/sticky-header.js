@@ -8,8 +8,7 @@
 	StickyHeader.$inject = [
 		'$window',
 		'$rootScope',
-		'$timeout',
-		'_'
+		'$timeout'
 	];
 
 	function StickyViewer() {
@@ -21,7 +20,7 @@
 		};
 	}
 
-	function StickyHeader($window, $rootScope, $timeout, _) {
+	function StickyHeader($window, $rootScope, $timeout) {
 		return {
 			restrict: 'A',
 			require: ['stickyHeader', '^stickyViewer'],
@@ -62,7 +61,8 @@
 						viewer = ctrls[1],
 						stickyHeader = angular.element(table.querySelector('thead.sticky')),
 						originHeader = ctrl.header = angular.element(table.querySelector('thead.origin')),
-						scrollView = viewer.element;
+						scrollView = viewer.element,
+						debounce = debounceFactory($timeout);
 
 					var invalidate = function () {
 							 var sticky = ctrl.th(stickyHeader),
@@ -88,7 +88,7 @@
 
 							 return false;
 						 },
-						 invalidateSome = _.debounce(invalidate, 300);
+						 invalidateSome = debounce(invalidate, 300);
 
 					var attach = function () {
 						var sticky = ctrl.th(stickyHeader),
@@ -134,4 +134,23 @@
 			}
 		};
 	}
+
+	function  debounceFactory($timeout) {
+		return debounce;
+
+		function debounce(f, timeout) {
+			var token;
+
+			return function action() {
+				if (token) {
+					$timeout.cancel(token);
+				}
+
+				token = $timeout(function () {
+					f();
+					token = null;
+				}, timeout);
+			};
+		}
+	};
 })(angular);
