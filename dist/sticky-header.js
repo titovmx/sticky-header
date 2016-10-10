@@ -31,7 +31,7 @@
 				divider.on('mousedown', dragstart);
 
 				function dragstart (event) {
-					event.preventdefaultWidth();
+					event.preventDefault();
 
 					if (ctrl && !originColumn) {
 						originColumn = ctrl.th(ctrl.header).find(function (th) {
