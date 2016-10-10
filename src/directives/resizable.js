@@ -17,9 +17,9 @@
 					previousWidth = 0,
 					previousX = 0,
 					originColumn = null,
-					default = {
-						minWidth: attrs.minWidth || 20,
-						maxWidth: attrs.maxWidth || 200
+					defaultWidth = {
+						min: attrs.minWidth || 20,
+						max: attrs.maxWidth || 200
 					};
 
 				element.after(divider);
@@ -27,7 +27,7 @@
 				divider.on('mousedown', dragstart);
 
 				function dragstart (event) {
-					event.preventDefault();
+					event.preventdefaultWidth();
 
 					if (ctrl && !originColumn) {
 						originColumn = ctrl.th(ctrl.header).find(function (th) {
@@ -35,9 +35,9 @@
 						});
 					}
 					if (minWidth == null) {
-						minWidth = parseInt(element.css('min-width'), 10) || default.minWidth;
+						minWidth = parseInt(element.css('min-width'), 10) || defaultWidth.min;
 					}
-					maxWidth = parseInt(element.css('max-width'), 10) || default.maxWidth;
+					maxWidth = parseInt(element.css('max-width'), 10) || defaultWidth.max;
 
 					previousWidth = parseInt(element.prop('clientWidth'));
 					previousX = event.screenX;
