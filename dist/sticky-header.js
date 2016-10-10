@@ -15,13 +15,16 @@
 			restrict: 'A',
 			require: '^?stickyHeader',
 			link: function (scope, element, attrs, ctrl) {
-				var divider = angular.element('<div class="divider"></div>');
-
-				var minWidth = 0,
-					maxWidth = 0,
+				var divider = angular.element('<div class="divider"></div>'),
+					minWidth = null,
+					maxWidth = null,
 					previousWidth = 0,
 					previousX = 0,
-					originColumn = null;
+					originColumn = null,
+					default = {
+						minWidth: attrs.minWidth || 20,
+						maxWidth: attrs.maxWidth || 200
+					};
 
 				element.after(divider);
 
@@ -35,10 +38,10 @@
 							return th.hasClass(attrs.resizable);
 						});
 					}
-					if (!minWidth) {
-						minWidth = parseInt(element.css('min-width'), 10);
+					if (minWidth == null) {
+						minWidth = parseInt(element.css('min-width'), 10) || default.minWidth;
 					}
-					maxWidth = parseInt(element.css('max-width'), 10);
+					maxWidth = parseInt(element.css('max-width'), 10) || default.maxWidth;
 
 					previousWidth = parseInt(element.prop('clientWidth'));
 					previousX = event.screenX;
@@ -48,9 +51,9 @@
 				}
 
 				function drag (event) {
-					var x = event.screenX;
+					var x = event.screenX,
+						newWidth = (previousWidth + x - previousX);
 
-					var newWidth = (previousWidth + x - previousX);
 					if (attrs.allowReduce || newWidth >= minWidth) {
 						newWidth += 'px';
 						var style = {
@@ -91,8 +94,7 @@
 	StickyHeader.$inject = [
 		'$window',
 		'$rootScope',
-		'$timeout',
-		'_'
+		'$timeout'
 	];
 
 	function StickyViewer() {
@@ -104,7 +106,7 @@
 		};
 	}
 
-	function StickyHeader($window, $rootScope, $timeout, _) {
+	function StickyHeader($window, $rootScope, $timeout) {
 		return {
 			restrict: 'A',
 			require: ['stickyHeader', '^stickyViewer'],
@@ -145,7 +147,8 @@
 						viewer = ctrls[1],
 						stickyHeader = angular.element(table.querySelector('thead.sticky')),
 						originHeader = ctrl.header = angular.element(table.querySelector('thead.origin')),
-						scrollView = viewer.element;
+						scrollView = viewer.element,
+						debounce = debounceFactory($timeout);
 
 					var invalidate = function () {
 							 var sticky = ctrl.th(stickyHeader),
@@ -171,7 +174,7 @@
 
 							 return false;
 						 },
-						 invalidateSome = _.debounce(invalidate, 300);
+						 invalidateSome = debounce(invalidate, 300);
 
 					var attach = function () {
 						var sticky = ctrl.th(stickyHeader),
@@ -217,17 +220,23 @@
 			}
 		};
 	}
-})(angular);
 
-(function (angular) {
-	'use strict';
+	function  debounceFactory($timeout) {
+		return debounce;
 
-	angular.module('sticky-header')
-		.factory('_', Factory);
-		
-	Factory.$inject = [];
+		function debounce(f, timeout) {
+			var token;
 
-	function Factory() {
-		return _;
-	}
+			return function action() {
+				if (token) {
+					$timeout.cancel(token);
+				}
+
+				token = $timeout(function () {
+					f();
+					token = null;
+				}, timeout);
+			};
+		}
+	};
 })(angular);

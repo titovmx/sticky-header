@@ -11,13 +11,16 @@
 			restrict: 'A',
 			require: '^?stickyHeader',
 			link: function (scope, element, attrs, ctrl) {
-				var divider = angular.element('<div class="divider"></div>');
-
-				var minWidth = 0,
-					maxWidth = 0,
+				var divider = angular.element('<div class="divider"></div>'),
+					minWidth = null,
+					maxWidth = null,
 					previousWidth = 0,
 					previousX = 0,
-					originColumn = null;
+					originColumn = null,
+					default = {
+						minWidth: attrs.minWidth || 20,
+						maxWidth: attrs.maxWidth || 200
+					};
 
 				element.after(divider);
 
@@ -31,10 +34,10 @@
 							return th.hasClass(attrs.resizable);
 						});
 					}
-					if (!minWidth) {
-						minWidth = parseInt(element.css('min-width'), 10);
+					if (minWidth == null) {
+						minWidth = parseInt(element.css('min-width'), 10) || default.minWidth;
 					}
-					maxWidth = parseInt(element.css('max-width'), 10);
+					maxWidth = parseInt(element.css('max-width'), 10) || default.maxWidth;
 
 					previousWidth = parseInt(element.prop('clientWidth'));
 					previousX = event.screenX;
@@ -44,9 +47,9 @@
 				}
 
 				function drag (event) {
-					var x = event.screenX;
+					var x = event.screenX,
+						newWidth = (previousWidth + x - previousX);
 
-					var newWidth = (previousWidth + x - previousX);
 					if (attrs.allowReduce || newWidth >= minWidth) {
 						newWidth += 'px';
 						var style = {
