@@ -14,3 +14,7 @@ bower install ng-sticky-header
 ## Demo
 
 http://codepen.io/titov-max/pen/WxJYry
+
+## Build
+
+Use command ```gulp build``` to concat sources

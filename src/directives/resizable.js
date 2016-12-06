@@ -1,81 +1,81 @@
 (function (angular) {
-	'use strict';
+    'use strict';
 
-	angular.module('sticky-header')
-		.directive('resizable', Resizable);
+    angular.module('sticky-header')
+        .directive('resizable', Resizable);
 
-	Resizable.$inject = ['$document'];
+    Resizable.$inject = ['$document'];
 
-	function Resizable ($document) {
-		return {
-			restrict: 'A',
-			require: '^?stickyHeader',
-			link: function (scope, element, attrs, ctrl) {
-				var divider = angular.element('<div class="divider"></div>'),
-					minWidth = null,
-					maxWidth = null,
-					previousWidth = 0,
-					previousX = 0,
-					originColumn = null,
-					defaultWidth = {
-						min: attrs.minWidth || 20,
-						max: attrs.maxWidth || 200
-					};
+    function Resizable ($document) {
+        return {
+            restrict: 'A',
+            require: '^?stickyHeader',
+            link: function (scope, element, attrs, ctrl) {
+                var divider = angular.element('<div class="divider"></div>'),
+                    minWidth = null,
+                    maxWidth = null,
+                    previousWidth = 0,
+                    previousX = 0,
+                    originColumn = null,
+                    defaultWidth = {
+                        min: attrs.minWidth || 20,
+                        max: attrs.maxWidth || 200
+                    };
 
-				element.after(divider);
+                element.after(divider);
 
-				divider.on('mousedown', dragstart);
+                divider.on('mousedown', dragstart);
 
-				function dragstart (event) {
-					event.preventDefault();
+                function dragstart (event) {
+                    event.preventDefault();
 
-					if (ctrl && !originColumn) {
-						originColumn = ctrl.th(ctrl.header).find(function (th) {
-							return th.hasClass(attrs.resizable);
-						});
-					}
-					if (minWidth == null) {
-						minWidth = parseInt(element.css('min-width'), 10) || defaultWidth.min;
-					}
-					maxWidth = parseInt(element.css('max-width'), 10) || defaultWidth.max;
+                    if (ctrl && !originColumn) {
+                        originColumn = ctrl.th(ctrl.header).find(function (th) {
+                            return th.hasClass(attrs.resizable);
+                        });
+                    }
+                    if (minWidth == null) {
+                        minWidth = parseInt(element.css('min-width'), 10) || defaultWidth.min;
+                    }
+                    maxWidth = parseInt(element.css('max-width'), 10) || defaultWidth.max;
 
-					previousWidth = parseInt(element.prop('clientWidth'));
-					previousX = event.screenX;
+                    previousWidth = parseInt(element.prop('clientWidth'));
+                    previousX = event.screenX;
 
-					$document.on('mousemove', drag);
-					$document.on('mouseup', dragend);
-				}
+                    $document.on('mousemove', drag);
+                    $document.on('mouseup', dragend);
+                }
 
-				function drag (event) {
-					var x = event.screenX,
-						newWidth = (previousWidth + x - previousX);
+                function drag (event) {
+                    var x = event.screenX,
+                        newWidth = (previousWidth + x - previousX);
 
-					if (attrs.allowReduce || newWidth >= minWidth) {
-						newWidth += 'px';
-						var style = {
-							'max-width': newWidth,
-							'min-width': newWidth,
-							'width': newWidth
-						};
-						element.css(style);
+                    if (attrs.allowReduce || newWidth >= minWidth) {
+                        newWidth += 'px';
+                        var style = {
+                            'max-width': newWidth,
+                            'min-width': newWidth,
+                            'width': newWidth
+                        };
+                        element.css(style);
 
-						if (originColumn) {
-							originColumn.css(style);
-						}
-					}
-				}
+                        if (originColumn) {
+                            originColumn.css(style);
+                        }
+                    }
+                }
 
-				function dragend () {
-					$document.off('mousemove', drag);
-					$document.off('mouseup', dragend);
-				}
+                function dragend () {
+                    $document.off('mousemove', drag);
+                    $document.off('mouseup', dragend);
+                }
 
-				scope.$on('$destroy', function () {
-					divider.off('mousedown', dragstart);
-					$document.off('mousemove', drag);
-					$document.off('mouseup', dragend);
-				});
-			}
-		}
-	}
+                scope.$on('$destroy', function () {
+                    divider.off('mousedown', dragstart);
+                    $document.off('mousemove', drag);
+                    $document.off('mouseup', dragend);
+                });
+            }
+        }
+    }
 })(angular);
