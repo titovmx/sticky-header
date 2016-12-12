@@ -138,10 +138,6 @@
                 originHeader.css('visibility', 'hidden');
                 originHeader.after(stickyHeader);
 
-                originHeader.on('$destroy', function () {
-                    stickyHeader.remove();
-                });
-
                 return function postLink(scope, element, attrs, ctrls) {
                     var table = element[0],
                         ctrl = ctrls[0],
@@ -213,6 +209,8 @@
                     });
 
                     scope.$on('$destroy', function () {
+                        stickyHeader.remove();
+                        scrollView.css('margin-top', '');
                         angular.element($window).off('resize', invalidate);
                     });
 
