@@ -1,11 +1,15 @@
 # sticky-header
 
-Angular directive to freeze header of table on the container top. 
+AngularJS directive to freeze header of table on the container top. 
 Includes possibility to resize columns.
 
-## Installing via Bower
+## Installing via bower
 
-bower install ng-sticky-header
+bower install ng-sticky-header --save
+
+## Installing via npm
+
+npm i ng-sticky-header
 
 ## Using
 

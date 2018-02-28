@@ -1,21 +1,21 @@
 {
   "name": "ng-sticky-header",
   "version": "1.0.0",
-  "description": "Angular directive to freeze header of table on the container top",
+  "description": "AngularJS directive to freeze header of table on the container top",
   "main": "/dist/sticky-header.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/titov-max/sticky-header.git"
+    "url": "git+https://github.com/titovmx/sticky-header.git"
   },
   "author": "Maxim Titov <mtitov92@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/titov-max/sticky-header/issues"
+    "url": "https://github.com/titovmx/sticky-header/issues"
   },
-  "homepage": "https://github.com/titov-max/sticky-header#readme",
+  "homepage": "https://github.com/titovmx/sticky-header#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0"
